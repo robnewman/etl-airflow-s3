@@ -33,3 +33,11 @@ As of writing, Apache Airflow does not support Python 3.7 (my default install), 
 7. Install Quilt T4:
 
 `pip install t4`
+
+8. Change the default location of of `AIRFLOW_HOME` to your project directory
+
+`$ export AIRFLOW_HOME="$(pwd)"`
+
+9. Initialize Airflow's database (default to SQLite):
+
+`$ airflow initdb`
