@@ -8,10 +8,16 @@ from datetime import datetime, timedelta
 
 # Newspaper
 import newspaper
-from newspaper import Config, Article, Source
+from newspaper import Article
 
 # Quilt
 import t4
+
+
+one_day_ago = datetime.combine(
+    datetime.today() - timedelta(1),
+    datetime.min.time()
+)
 
 default_args = {
     'owner': 'rnewman',
@@ -21,7 +27,8 @@ default_args = {
     'email_on_failure': False,
     'email_on_retry': False,
     'retries': 1,
-    'retry_delay': timedelta(minutes=5)
+    'retry_delay': timedelta(minutes=5),
+    'provide_context':True
     # 'queue': 'bash_queue',
     # 'pool': 'backfill',
     # 'priority_weight': 10,
@@ -33,32 +40,21 @@ dag = DAG(
     default_args=default_args,
     schedule_interval=timedelta(days=1))
 
-def get_headlines(source_url):
+def get_headlines(**kwargs):
 
     keywords_list = list()
 
-    print(f"Grabbing headlines from {source_url}")
-
-    config = Config()
-    config.memoize_articles = False
-    config.fetch_images = False
-    config.browser_user_agent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36"
-    config.headers = {
-        'user-agent': "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36",
-        'referer': "https://google.com",
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
-        'Accept-Encoding': 'gzip, deflate, br',
-        'Accept-Language': 'en-US,en;q=0.9',
-        'Pragma': 'no-cache'
-    }
-
+    print(f"Grabbing political headlines from {kwargs['source_url']}")
     print("Build newspaper...")
-    paper = newspaper.build(source_url)
+    paper = newspaper.build(
+        kwargs['source_url'],
+        memoize_articles=False
+    )
     print("Collect today's articles")
     for article in paper.articles:
-        print(article.url)
-        single_article = Article(article.url)
-        if single_article.publish_date > datetime.now() - timedelta(days=1):
+        if 'politics' in article.url:
+            print(article.url)
+            single_article = Article(article.url)
             # Must call download and parse before NLP analysis
             single_article.download()
             count = 0
@@ -68,16 +64,25 @@ def get_headlines(source_url):
                 time.sleep(count)
             single_article.parse()
             single_article.nlp()
-            keywords_list.append(single_article.keywords)
+            keywords_list.extend(single_article.keywords)
     print("Completed parsing articles")
+    print("Push to Xcom\n\n")
+    return keywords_list
+    # kwargs['ti'].xcom_push(key='keywords_list', value=keywords_list)
 
+def add_to_package(**kwargs):
+    ti = kwargs['ti']
 
-def add_to_package():
-    print("Add to package")
+    print("\n\nAdd to package")
+
+    # Get values
+    keywords_list = ti.xcom_pull(task_ids='get_headlines')
+    print("Return unique values")
+    keyword_set = set(keywords_list)
+    print(keyword_set)
 
 t1 = PythonOperator(
     task_id='get_headlines',
-    provide_context=False,
     python_callable=get_headlines,
     op_kwargs={'source_url': 'https://theguardian.com'},
     dag=dag
@@ -85,7 +90,6 @@ t1 = PythonOperator(
 
 t2 = PythonOperator(
     task_id='add_to_package',
-    provide_context=False,
     python_callable=add_to_package,
     dag=dag
 )
