@@ -1,13 +1,13 @@
 import os
 import json
 from time import time
+from datetime import datetime, timedelta
 from collections import Counter
 
 # Apache Airflow
 from airflow import DAG
 from airflow.operators.dummy_operator import DummyOperator
 from airflow.operators.python_operator import PythonOperator
-from datetime import datetime, timedelta
 
 # Newspaper3k
 import newspaper
@@ -16,14 +16,8 @@ from newspaper import Article
 # Quilt
 import t4
 
-
-one_day_ago = datetime.combine(
-    datetime.today() - timedelta(1),
-    datetime.min.time()
-)
-
 default_args = {
-    'owner': 'rnewman',
+    'owner': 'robnewman',
     'depends_on_past': False,
     'start_date': datetime(2019, 1, 1),
     'email': ['robertlnewman@gmail.com'],
@@ -140,7 +134,7 @@ def add_to_package(**context):
     p.push(
         "robnewman/sentiment-analysis-headlines",
         dest="s3://alpha-quilt-storage/sentiment-analysis-headlines",
-        message="Second commit with three sources"
+        message="Second commit with three headline sources"
         # message=f"Data from {datetime.today().strftime('%Y-%m-%d')}"
     )
     return True
