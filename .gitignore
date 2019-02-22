@@ -111,3 +111,6 @@ unittests.cfg
 
 # VSCode
 .vscode/
+
+# Scraped data
+data/

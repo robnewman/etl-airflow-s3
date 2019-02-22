@@ -54,7 +54,7 @@ def scrape_articles(**kwargs):
 
     sources_keywords = dict()
 
-    print(f"Scrape '{category}' headlines from {len(sources)} sources")
+    print(f"Scrape headlines from {len(sources)} sources that include '{category}' in the url")
     for s in sources:
         print(f"START: Scrape articles from '{s}'")
         print(f"START: Build newspaper")
@@ -97,17 +97,26 @@ def write_to_json(**context):
     status : boolean
         Status of writing sentiment to disk
     """
-    datafile = context['file']
+    data_directory = context['directory']
+    file_name = context['filename']
     keywords = context['task_instance'].xcom_pull(task_ids='scrape_articles')
-    with open(datafile, 'w') as df:
-        json.dump(
-            keywords,
-            df,
-            ensure_ascii=False,
-            indent=2,
-            sort_keys=True
-        )
-    return datafile
+    file_names = list()
+    for k in keywords:
+        # Strip leading 'https://' and trailing '.com'
+        domain = k.replace("https://","")
+        domain = domain.replace(".com", "")
+        new_fname = f"{data_directory}/{domain}_{file_name}"
+        file_names.append(new_fname)
+        with open(new_fname, 'w') as f:
+            json.dump(
+                keywords[k],
+                f,
+                ensure_ascii=False,
+                indent=2,
+                sort_keys=True
+            )
+
+    return file_names
 
 def add_to_package(**context):
     """
@@ -123,19 +132,19 @@ def add_to_package(**context):
     status : boolean
         Status of add file to package
     """    
-    datafile = context['task_instance'].xcom_pull(task_ids='write_to_json')
+    datafiles = context['task_instance'].xcom_pull(task_ids='write_to_json')
     p = t4.Package()
-    p = p.set_dir(
-        "data/",
-        f"{os.getcwd()}/data"
-    )
-    # p.set_meta({"package-type": "airflow-demo"})
+    for df in datafiles:
+        p = p.set(
+            df,
+            f"{os.getcwd()}/{df}",
+            meta=f"Add source file from {datetime.today().strftime('%Y-%m-%d')}"
+        )
     tophash = p.build("robnewman/sentiment-analysis-headlines")
     p.push(
         "robnewman/sentiment-analysis-headlines",
         dest="s3://alpha-quilt-storage/sentiment-analysis-headlines",
-        message="Second commit with three headline sources"
-        # message=f"Data from {datetime.today().strftime('%Y-%m-%d')}"
+        message=f"Source data from {datetime.today().strftime('%Y-%m-%d')}"
     )
     return True
 
@@ -158,7 +167,8 @@ task2 = PythonOperator(
     task_id='write_to_json',
     python_callable=write_to_json,
     op_kwargs={
-        'file': 'data/keywords.json'
+        'directory': 'data',
+        'filename': 'keywords.json'
     },
     dag=dag
 )
