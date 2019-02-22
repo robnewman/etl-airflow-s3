@@ -31,7 +31,7 @@
             "name": "color",
             "type": "ordinal",
             "domain": {"data": "table", "field": "text"},
-            "range": ["#d5a928", "#652c90", "#939597"]
+            "range": ["#0C0C0C", "#1A1A1A", "#CB0000"]
         }
     ],
     "marks": [
