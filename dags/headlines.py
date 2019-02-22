@@ -115,7 +115,6 @@ def write_to_json(**context):
                 indent=2,
                 sort_keys=True
             )
-
     return file_names
 
 def add_to_package(**context):

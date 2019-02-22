@@ -1,4 +1,6 @@
 [
     "description.md",
-    "src/visualization/vega_specs/word-cloud.json"
+    "src/visualization/vega_specs/word-cloud_theguardian.json",
+    "src/visualization/vega_specs/word-cloud_nytimes.json",
+    "src/visualization/vega_specs/word-cloud_cnn.json"
 ]
