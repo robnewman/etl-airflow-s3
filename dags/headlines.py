@@ -2,7 +2,7 @@ import os
 import json
 from time import time
 from datetime import datetime, timedelta
-from collections import Counter
+# from collections import Counter
 
 # Apache Airflow
 from airflow import DAG
@@ -78,7 +78,7 @@ def scrape_articles(**kwargs):
                 single_article.parse()
                 single_article.nlp()
                 keywords_list.extend(single_article.keywords)
-        sources_keywords[s] = Counter(keywords_list)
+        sources_keywords[s] = keywords_list
         print("END: Collect articles")
         print(f"END: Scrape articles from '{paper}'")
     return sources_keywords
@@ -133,13 +133,33 @@ def add_to_package(**context):
     """    
     datafiles = context['task_instance'].xcom_pull(task_ids='write_to_json')
     p = t4.Package()
+    # Add datafiles
     for df in datafiles:
         p = p.set(
             df,
             f"{os.getcwd()}/{df}",
             meta=f"Add source file from {datetime.today().strftime('%Y-%m-%d')}"
         )
+    # Add summary
+    p.set(
+        "quilt_summarize.json",
+        "quilt_summarize.json",
+        meta="Add summarize file"
+    )
+    # Add description
+    p.set(
+        "description.md",
+        "description.md",
+        meta="Project outline"
+    )
+    # Add visualizations
+    p.set_dir(
+        "src/visualization/vega_specs/",
+        "src/visualization/vega_specs/"
+    )
+    # Build package
     tophash = p.build("robnewman/sentiment-analysis-headlines")
+    # Push package
     p.push(
         "robnewman/sentiment-analysis-headlines",
         dest="s3://alpha-quilt-storage/sentiment-analysis-headlines",
