@@ -1,0 +1,70 @@
+{
+    "$schema": "https://vega.github.io/schema/vega/v4.json",
+    "width": 800,
+    "height": 400,
+    "padding": 0,
+    "data": [
+        {
+            "name": "table",
+            "url": "../../../data/cnn_keywords.json",
+            "transform": [
+                {
+                    "type": "countpattern",
+                    "field": "data",
+                    "case": "upper",
+                    "pattern": "[\\w']{3,}",
+                    "stopwords": ""
+                },
+                {
+                    "type": "formula", "as": "angle",
+                    "expr": "[-45, 0, 45][~~(random() * 3)]"
+                },
+                {
+                    "type": "formula", "as": "weight",
+                    "expr": "if(datum.text=='CNN', 600, 300)"
+                }
+            ]
+        }
+    ],
+    "scales": [
+        {
+            "name": "color",
+            "type": "ordinal",
+            "domain": {"data": "table", "field": "text"},
+            "range": ["#0C0C0C", "#1A1A1A", "#CB0000"]
+        }
+    ],
+    "marks": [
+        {
+            "type": "text",
+            "from": {"data": "table"},
+            "encode": {
+                "enter": {
+                    "text": {"field": "text"},
+                    "align": {"value": "center"},
+                    "baseline": {"value": "alphabetic"},
+                    "fill": {"scale": "color", "field": "text"}
+                },
+                "update": {
+                    "fillOpacity": {"value": 1}
+                },
+                "hover": {
+                    "fillOpacity": {"value": 0.5}
+                }
+            },
+            "transform": [
+                {
+                    "type": "wordcloud",
+                    "size": [800, 400],
+                    "text": {"field": "text"},
+                    "rotate": {"field": "datum.angle"},
+                    "font": "Helvetica Neue, Arial",
+                    "fontSize": {"field": "datum.count"},
+                    "fontWeight": {"field": "datum.weight"},
+                    "fontSizeRange": [12, 56],
+                    "padding": 2
+                }
+            ]
+        }
+    ]
+}

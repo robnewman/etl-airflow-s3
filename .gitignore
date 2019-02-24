@@ -108,3 +108,9 @@ airflow.cfg
 airflow.db
 logs/
 unittests.cfg
+
+# VSCode
+.vscode/
+
+# Scraped data
+data/
