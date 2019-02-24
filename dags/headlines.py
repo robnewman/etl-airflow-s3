@@ -2,7 +2,6 @@ import os
 import json
 from time import time
 from datetime import datetime, timedelta
-# from collections import Counter
 
 # Apache Airflow
 from airflow import DAG
