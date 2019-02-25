@@ -41,11 +41,3 @@ As of writing, Apache Airflow does not support Python 3.7 (my default install), 
 9. Initialize Airflow's database (default to SQLite):
 
 `$ airflow initdb`
-
-## Data Retrieval: Open Weather Map
-
-We are going to get weather data from [OpenWeatherMap](https://openweathermap.org) using their [API](https://api.openweathermap.org). We'll get the current weather for the all Californian cities using the Current Weather API by specifying a bounding box (`bbox`) in the API call:
-
-`http://api.openweathermap.org/data/2.5/box/city?bbox=-125,32,-114,42,10&appid=[APIKEY]`
-
-where `APIKEY` is your personal API key.
