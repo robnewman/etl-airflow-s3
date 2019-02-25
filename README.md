@@ -41,3 +41,11 @@ As of writing, Apache Airflow does not support Python 3.7 (my default install), 
 9. Initialize Airflow's database (default to SQLite):
 
 `$ airflow initdb`
+
+10. Start the scheduler:
+
+`$ airflow scheduler`
+
+11. Start the webserver (DAG interface):
+
+`$ airflow webserver`
