@@ -1,6 +1,7 @@
 # etl-airflow-s3
 
-ETL using Apache Airflow and S3
+ETL of newspaper article keywords using Apache Airflow, Newspaper3k, Quilt T4
+and AWS S3
 
 ## Setup
 
