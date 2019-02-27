@@ -174,8 +174,8 @@ task1 = PythonOperator(
     python_callable=scrape_articles,
     op_kwargs={
         'source_urls': [
-            # 'https://theguardian.com',
-            # 'https://nytimes.com',
+            'https://theguardian.com',
+            'https://nytimes.com',
             'https://cnn.com'
         ],
         'category': 'politics'
