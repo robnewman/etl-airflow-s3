@@ -77,6 +77,8 @@ def scrape_articles(**kwargs):
                 single_article.parse()
                 single_article.nlp()
                 keywords_list.extend(single_article.keywords)
+        if len(keywords_list) == 0:
+            keywords_list.append("Error: No keywords")
         sources_keywords[s] = keywords_list
         print("END: Collect articles")
         print(f"END: Scrape articles from '{paper}'")
@@ -172,8 +174,8 @@ task1 = PythonOperator(
     python_callable=scrape_articles,
     op_kwargs={
         'source_urls': [
-            'https://theguardian.com',
-            'https://nytimes.com',
+            # 'https://theguardian.com',
+            # 'https://nytimes.com',
             'https://cnn.com'
         ],
         'category': 'politics'
