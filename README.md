@@ -26,9 +26,9 @@ As of writing, Apache Airflow does not support Python 3.7 (my default install), 
 
 `source /path/to/virtual-environment/bin/activate`
 
-6. Install Apache Airflow (with support for S3-specific features):
+6. Install Apache Airflow:
 
-`pip install apache-airflow[s3]`
+`pip install apache-airflow`
 
 7. Install Quilt T4:
 
@@ -36,9 +36,9 @@ As of writing, Apache Airflow does not support Python 3.7 (my default install), 
 
 8. Change the default location of of `AIRFLOW_HOME` to your project directory
 
-`$ export AIRFLOW_HOME="$(pwd)"`
+`$ export AIRFLOW_HOME=~/airflow`
 
-9. Initialize Airflow's database (default to SQLite):
+9. Initialize Airflow's database (defaults to SQLite):
 
 `$ airflow initdb`
 
@@ -49,3 +49,25 @@ As of writing, Apache Airflow does not support Python 3.7 (my default install), 
 11. Start the webserver (DAG interface):
 
 `$ airflow webserver`
+
+## <a name="simplifydaginterface"></a>Simplify the DAG web interface
+
+By default, Airflow helpfully loads ~15 example DAGs: great for
+learning but which clutter the UI. You can remove these (which you
+will definitely want to do before moving to a production environment)
+by setting the `load_examples` flag to `False` in the `[core]` section
+of `AIRFLOW_HOME/airflow.cfg`:
+
+```
+# Whether to load the examples that ship with Airflow. It's good to
+# get started, but you probably want to set this to False in 
+# a production environment
+load_examples = False
+```
+
+Note: If you started the Airflow scheduler and webserver _before_
+updating this setting, you'll still see the example DAGs in the web
+UI. To reset the view, run the following command (warning - this
+will destroy all current DAG information!):
+
+`$ airflow resetdb`
