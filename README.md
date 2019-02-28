@@ -113,3 +113,16 @@ Check each task in your DAG:
 Test DAG tasks end-to-end:
 
 `$ airflow test <dag_id> <task_id> <execution_date>`
+
+## Scrape headlines
+
+Scrape headlines from online news sources by running the `headlines` DAG in
+the Airflow user-interface, or by running the following atomic tasks:
+
+```
+$ airflow test headlines scrape_articles YYYY-MM-DD
+$ airflow test headlines write_to_json YYYY-MM-DD
+$ airflow test headlines add_to_package YYYY-MM-DD
+```
+
+where `YYYY-MM-DD` is today's date
