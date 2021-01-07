@@ -47,7 +47,7 @@ jmespath==0.9.3
 json-merge-patch==0.2
 jsonlines==1.2.0
 lockfile==0.12.2
-lxml==4.3.1
+lxml==4.6.2
 Mako==1.0.7
 Markdown==2.6.11
 MarkupSafe==1.1.0
