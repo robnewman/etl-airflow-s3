@@ -59,7 +59,7 @@ ordereddict==1.1
 packaging==19.0
 pandas==0.24.1
 pendulum==1.4.4
-Pillow==5.4.1
+Pillow==8.1.1
 psutil==5.5.1
 pyarrow==0.12.0
 pycparser==2.19
