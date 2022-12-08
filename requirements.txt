@@ -54,7 +54,7 @@ MarkupSafe==1.1.0
 monotonic==1.5
 newspaper3k==0.2.8
 nltk==3.4
-numpy==1.16.1
+numpy==1.22.0
 ordereddict==1.1
 packaging==19.0
 pandas==0.24.1
