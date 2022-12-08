@@ -2,7 +2,7 @@ alembic==0.8.10
 apache-airflow==1.10.2
 appdirs==1.4.3
 aws-requests-auth==0.4.2
-Babel==2.6.0
+Babel==2.9.1
 beautifulsoup4==4.7.1
 bleach==3.3.0
 boto3==1.9.97
