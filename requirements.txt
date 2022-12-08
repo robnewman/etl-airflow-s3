@@ -4,7 +4,7 @@ appdirs==1.4.3
 aws-requests-auth==0.4.2
 Babel==2.6.0
 beautifulsoup4==4.7.1
-bleach==2.1.4
+bleach==3.3.0
 boto3==1.9.97
 botocore==1.12.97
 certifi==2018.11.29
