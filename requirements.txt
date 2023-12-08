@@ -61,7 +61,7 @@ pandas==0.24.1
 pendulum==1.4.4
 Pillow==10.0.1
 psutil==5.6.6
-pyarrow==0.15.1
+pyarrow==14.0.1
 pycparser==2.19
 Pygments==2.15.0
 pyparsing==2.3.1
