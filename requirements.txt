@@ -1,5 +1,5 @@
 alembic==0.8.10
-apache-airflow==2.7.3
+apache-airflow==2.8.0
 appdirs==1.4.3
 aws-requests-auth==0.4.2
 Babel==2.9.1
