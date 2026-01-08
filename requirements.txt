@@ -96,7 +96,7 @@ unicodecsv==0.14.1
 Unidecode==1.0.23
 urllib3==1.26.19
 webencodings==0.5.1
-Werkzeug==3.0.6
+Werkzeug==3.1.5
 WTForms==2.2.1
 xattr==0.9.6
 zope.deprecation==4.4.0
