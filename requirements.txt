@@ -94,7 +94,7 @@ tqdm==4.66.3
 tzlocal==1.5.1
 unicodecsv==0.14.1
 Unidecode==1.0.23
-urllib3==1.26.19
+urllib3==2.6.3
 webencodings==0.5.1
 Werkzeug==3.0.6
 WTForms==2.2.1
