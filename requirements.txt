@@ -49,7 +49,7 @@ jsonlines==1.2.0
 lockfile==0.12.2
 lxml==4.9.1
 Mako==1.2.2
-Markdown==2.6.11
+Markdown==3.8.1
 MarkupSafe==1.1.0
 monotonic==1.5
 newspaper3k==0.2.8
